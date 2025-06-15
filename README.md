@@ -1,38 +1,26 @@
-# sv
+# structure chart
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+this demo is just to provide a simple interface to create [structure chart](https://en.wikipedia.org/wiki/Structure_chart)
 
-## Creating a project
+It's not a finished product so don't try to break it, you're gonna success easly ;)
 
-If you're seeing this, you've probably already done this step. Congrats!
+if you have some improvement in mind, please create an issue explaining what to improve
 
-```bash
-# create a new project in the current directory
-npx sv create
+## functionality
+- download the chart as png
+- export the chart structure as json
+- import an exported chart into the current panel
+- store the chart inside the local storage
+- load stored charts
 
-# create a new project in my-app
-npx sv create my-app
-```
+## Guideline
+possible structure chart operations are:
+- create a function node
+- link nodes together
+- create a while loop (the oval in the top right. Resize it to include all desired nodes)
+- if statement (the green rhombus)
+- declare e var. Click the arrow to switch the dot between empty and full. Click under the control buttons to insert the variable name
 
-## Developing
+Additionally, you can remove any node or edge. For edges click on the one to remove and press 'canc' or 'backspace'
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Enjoy!
