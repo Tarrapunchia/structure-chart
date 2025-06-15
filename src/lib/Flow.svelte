@@ -4,55 +4,26 @@
       Controls,
       Background,
       BackgroundVariant,
+      MarkerType,
       MiniMap,
       useSvelteFlow,
+      ConnectionLineType,
       type Node,
+      type Edge,
     } from '@xyflow/svelte';
-   
     import { useDnD } from './DnDProvider.svelte';
     import Sidebar from './Sidebar.svelte';
     import CustomNode from './CustomNode.svelte';
     import WhileNode from './WhileNode.svelte';
     import CustomEdge from './CustomEdge.svelte';
     import IfNode from './IfNode.svelte';
+    import VarNode from './VarNode.svelte';
    
     import '@xyflow/svelte/dist/style.css';
    
-    let nodes = $state.raw([
-      {
-        id: '1',
-        type: 'input',
-        data: { label: 'Input Node' },
-        position: { x: 150, y: 5 },
-      },
-      {
-        id: '2',
-        type: 'default',
-        data: { label: 'Default Node' },
-        position: { x: 0, y: 150 },
-      },
-      {
-        id: '3',
-        type: 'output',
-        data: { label: 'Output Node' },
-        position: { x: 300, y: 150 },
-      },
-    ]);
+    let nodes = $state.raw<Node[]>([]);
    
-    let edges = $state.raw([
-      {
-        id: '1-2',
-        type: 'custom-edge',
-        source: '1',
-        target: '2',
-      },
-      {
-        id: '1-3',
-        type: 'custom-edge',
-        source: '1',
-        target: '3',
-      },
-    ]);
+    let edges = $state.raw<Edge[]>([]);
    
     const { screenToFlowPosition } = useSvelteFlow();
    
@@ -92,13 +63,29 @@
     const nodeTypes = {
         custom: CustomNode,
         while: WhileNode,
-        if: IfNode
+        if: IfNode,
+        var: VarNode
     };
     const edgeTypes = { 'custom-edge': CustomEdge };
+    const defaultEdgeOptions = {
+      type: 'custom-edge',
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+    };
   </script>
    
   <main>
-    <SvelteFlow bind:nodes bind:edges {nodeTypes} {edgeTypes} fitView ondragover={onDragOver} ondrop={onDrop}>
+    <SvelteFlow
+      bind:nodes
+      bind:edges
+      {nodeTypes}
+      {edgeTypes}
+      {defaultEdgeOptions}
+      fitView ondragover={onDragOver}
+      connectionLineType={ConnectionLineType.Straight}
+      ondrop={onDrop}
+    >
       <Controls />
       <Background variant={BackgroundVariant.Dots} />
       <MiniMap />
@@ -112,4 +99,5 @@
       display: flex;
       flex-direction: column-reverse;
     }
+
   </style>

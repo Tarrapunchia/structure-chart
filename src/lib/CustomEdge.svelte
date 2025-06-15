@@ -1,38 +1,30 @@
 <script lang="ts">
-    import {
-      BaseEdge,
-      getStraightPath,
-      type EdgeProps,
-      EdgeLabel,
-      useEdges,
-    } from '@xyflow/svelte';
-    import { CircleX } from '@lucide/svelte';
-
-    let { id, sourceX, sourceY, targetX, targetY }: EdgeProps = $props();
-   
-    let [edgePath, labelX, labelY] = $derived(
-      getStraightPath({
-        sourceX,
-        sourceY,
-        targetX,
-        targetY,
-      }),
-    );
-   
-    const edges = useEdges();
-  </script>
-   
-  <BaseEdge {id} path={edgePath} />
-  <EdgeLabel x={labelX} y={labelY}>
-    <button
-      class="nodrag nopan"
-      style:border="none"
-      style:background-color={"transparent"}
-      style:cursor="pointer"
-      onclick={() => {
-        edges.update((eds) => eds.filter((edge) => edge.id !== id));
-      }}
-    >
-      <CircleX strokeWidth={1}/>
-    </button>
-  </EdgeLabel>
+  import {
+    BaseEdge,
+    getStraightPath,
+    useInternalNode,
+    type EdgeProps,
+  } from '@xyflow/svelte';
+ 
+  import { getEdgeParams } from './utils';
+ 
+  let { id, source, target, markerEnd }: EdgeProps = $props();
+ 
+  const sourceNode = useInternalNode(source);
+  const targetNode = useInternalNode(target);
+ 
+  let path: string | undefined = $derived.by(() => {
+    if (sourceNode.current && targetNode.current) {
+      const edgeParams = getEdgeParams(sourceNode.current, targetNode.current);
+      return getStraightPath({
+        sourceX: edgeParams.sx,
+        sourceY: edgeParams.sy,
+        targetX: edgeParams.tx,
+        targetY: edgeParams.ty,
+      })[0];
+    }
+    return undefined;
+  });
+</script>
+ 
+<BaseEdge {id} {path} {markerEnd} style="stroke-width: 1px; stroke: grey"/>

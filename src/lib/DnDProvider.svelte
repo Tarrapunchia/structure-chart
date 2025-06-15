@@ -2,7 +2,7 @@
   import { getContext } from 'svelte';
  
   export const useDnD = () => {
-    return getContext('dnd') as { current: string | null };
+    return getContext('dnd');
   };
 </script>
 <script lang="ts">
