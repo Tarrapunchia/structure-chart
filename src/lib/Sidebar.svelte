@@ -1,6 +1,8 @@
 <script lang="ts">
     import { toPng } from 'html-to-image';
     import { useDnD } from './DnDProvider.svelte';
+    import HelpPanel from './HelpPanel.svelte';
+    import { fade } from 'svelte/transition';
     import { Dot, MoveRight, ImageDown, Save, ArrowRightFromLine, Import, BrushCleaning } from '@lucide/svelte';
     import {
       getViewportForBounds,
@@ -21,6 +23,7 @@
     let stored_charts = $state({});
     let option_value:string = $state("");
     let input_file = $state();
+    let show_help = $state(false);
     function handleClick() {
       const nodesBounds = svelteFlow.getNodesBounds(nodes.current);
       const viewport = getViewportForBounds(
@@ -203,14 +206,28 @@
             {/each}
 	        </select>
           <button style="border: none; background-color:transparent; cursor: pointer;" onclick={() => {
-            nodes.set([]);
-            edges.set([]);
+            if (confirm("Reset the chart?")) {
+              nodes.set([]);
+              edges.set([]);
+            }
           }}>
             <BrushCleaning strokeWidth={1}/>
           </button>
+        <button style="border: none; background-color:transparent; cursor: pointer;" onclick={() => {
+          show_help = true;
+          console.log("show help " + show_help);
+        }}>
+          HELP!
+        </button>
         </div>
     </div>
 </aside>
+{#if show_help}
+  <div transition:fade={{ duration: 300 }}>
+    <HelpPanel onClose={() => show_help = false} />
+  </div>
+{/if}
+
 
    
 <style>
